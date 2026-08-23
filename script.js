@@ -1,6 +1,24 @@
 const PASSWORD = "2408";
 const START_DATE = new Date("2026-03-28T00:00:00");
 
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+
+// دالة تشغيل الصوت التلقائية
+function playAudio() {
+    if (music.paused) {
+        music.play().then(() => {
+            if (musicBtn) musicBtn.textContent = "⏸️ إيقاف الأغنية";
+        }).catch(err => {
+            console.log("في انتظار التفاعل لتشغيل الصوت:", err);
+        });
+    }
+}
+
+// 💥 حيلة التشغيل التلقائي: تشغيل الأغنية فور لمس الشاشة لأول مرة
+document.addEventListener("touchstart", playAudio, { once: true });
+document.addEventListener("click", playAudio, { once: true });
+
 // العناصر البرمجية
 const passwordScreen = document.getElementById("passwordScreen");
 const passwordInput = document.getElementById("passwordInput");
@@ -12,23 +30,9 @@ const memoriesScreen = document.getElementById("memoriesScreen");
 const kissRefusedMsg = document.getElementById("kissRefusedMsg");
 
 // 1. فك قفل الباسورد
-// دالة تشغيل الصوت الخفية
-function startAudioAutomatically() {
-    if (music.paused) {
-        music.play().then(() => {
-            musicBtn.textContent = "⏸️ إيقاف الأغنية";
-        }).catch(err => {
-            console.log("المتصفح منع التشغيل التلقائي حتى الآن:", err);
-        });
-    }
-}
-
-// 1. فك قفل الباسورد وتعديل تشغيل الصوت فور الضغط
 function unlockGift() {
+    playAudio(); // تشغيل الصوت فوراً عند فتح الهدية
     if (passwordInput.value.trim() === PASSWORD) {
-        // تشغيل الأغنية فوراً عند الضغط على زر فتح الهدايا!
-        startAudioAutomatically();
-
         passwordScreen.classList.add("hidden");
         giftScreen.classList.remove("hidden");
         particles(20);
@@ -37,17 +41,10 @@ function unlockGift() {
         passwordInput.value = "";
     }
 }
-
-// تشغيل الصوت أيضاً عند الضغط على أي مكان في الشاشة كخيار إضافي
-document.body.addEventListener("click", function startOnFirstClick() {
-    startAudioAutomatically();
-    // إزالة المستمع بعد أول لمسة للشاشة
-    document.body.removeEventListener("click", startOnFirstClick);
-}, { once: true });
 document.getElementById("unlockBtn").addEventListener("click", unlockGift);
 passwordInput.addEventListener("keydown", e => { if (e.key === "Enter") unlockGift(); });
 
-// 2. تأثير التألق والقلوب
+// 2. القلوب والـ Particles
 function particles(n) {
     const wrap = document.getElementById("particles");
     if (!wrap) return;
@@ -71,6 +68,7 @@ function particles(n) {
 
 // 3. الضغط على الهدية
 document.getElementById("giftBox").addEventListener("click", () => {
+    playAudio();
     particles(35);
     setTimeout(() => {
         giftScreen.classList.add("hidden");
@@ -78,30 +76,26 @@ document.getElementById("giftBox").addEventListener("click", () => {
     }, 500);
 });
 
-// 4. الانتقال لسلايد السؤال عند الضغط على زر "التالي"
+// 4. الانتقال لسؤال "عايز بوسة"
 document.getElementById("showMemories").addEventListener("click", () => {
     surpriseScreen.classList.add("hidden");
     questionScreen.classList.remove("hidden");
 });
 
-// 5. التحكم في إجابات سؤال "عايز بوسة؟"
-// إذا ضغطت على "أوكيه":
+// 5. إجابات "عايز بوسة؟"
 document.getElementById("yesKissBtn").addEventListener("click", () => {
     particles(40);
     questionScreen.classList.add("hidden");
     memoriesScreen.classList.remove("hidden");
-    // تشغيل العداد عند فتح سلايد الذكريات
     updateCounter();
     setInterval(updateCounter, 1000);
 });
 
-// إذا ضغطت على "لا":
 document.getElementById("noKissBtn").addEventListener("click", () => {
-    // إظهار الرسالة "أنا عايز بوسة ضروري"
     kissRefusedMsg.classList.remove("hidden");
 });
 
-// 6. دالة العداد الزمني (معدلة وحساب الثواني مضبوط)
+// 6. العداد
 function updateCounter() {
     let x = Math.max(0, Date.now() - START_DATE);
     const d = 86400000, h = 3600000, m = 60000;
@@ -109,7 +103,7 @@ function updateCounter() {
     const days = Math.floor(x / d); x %= d;
     const hours = Math.floor(x / h); x %= h;
     const mins = Math.floor(x / m); x %= m;
-    const secs = Math.floor((x / 1000) % 60); // التعديل الصحيح للثواني
+    const secs = Math.floor((x / 1000) % 60);
 
     document.getElementById("days").textContent = days;
     document.getElementById("hours").textContent = String(hours).padStart(2, "0");
@@ -117,20 +111,12 @@ function updateCounter() {
     document.getElementById("seconds").textContent = String(secs).padStart(2, "0");
 }
 
-// 7. كود الموسيقى المضمون
-const music = document.getElementById("music");
-const musicBtn = document.getElementById("musicBtn");
-
-musicBtn.addEventListener("click", function() {
+// 7. زر التحكم بالصوت من خارج الشاشة
+musicBtn.addEventListener("click", function(e) {
+    e.stopPropagation(); // منع التداخل
     if (music.paused) {
-        var playPromise = music.play();
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                musicBtn.textContent = "⏸️ إيقاف الأغنية";
-            }).catch(error => {
-                alert("تعذر تشغيل الصوت! تأكد أن الملف اسمه music.mp3 وموجود داخل مجلد assets: " + error);
-            });
-        }
+        music.play();
+        musicBtn.textContent = "⏸️ إيقاف الأغنية";
     } else {
         music.pause();
         musicBtn.textContent = "🎵 تشغيل الأغنية";
