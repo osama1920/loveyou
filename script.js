@@ -6,8 +6,7 @@ const passwordError=document.getElementById("passwordError");
 const giftScreen=document.getElementById("giftScreen");
 const surpriseScreen=document.getElementById("surpriseScreen");
 const memoriesScreen=document.getElementById("memoriesScreen");
-const music = document.getElementById("music");
-const musicBtn = document.getElementById("musicBtn");
+
 
 function unlockGift(){
  if(passwordInput.value.trim()===PASSWORD){
@@ -51,15 +50,3 @@ function updateCounter(){
  document.getElementById("minutes").textContent=String(mins).padStart(2,"0");
  document.getElementById("seconds").textContent=String(secs).padStart(2,"0");
 }
-musicBtn.addEventListener("click", function() {
-    if (music.paused) {
-        music.play().then(() => {
-            musicBtn.textContent = "⏸️ إيقاف الأغنية";
-        }).catch(err => {
-            alert("المتصفح لم يجد ملف الصوت! تأكد من وجود ملف music.mp3 في GitHub بنفس الاسم تماماً.");
-        });
-    } else {
-        music.pause();
-        musicBtn.textContent = "🎵 تشغيل الأغنية";
-    }
-});
