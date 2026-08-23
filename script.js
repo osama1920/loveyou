@@ -49,23 +49,3 @@ function updateCounter(){
  document.getElementById("minutes").textContent=String(mins).padStart(2,"0");
  document.getElementById("seconds").textContent=String(secs).padStart(2,"0");
 }
-const music = document.getElementById("music");
-const musicBtn = document.getElementById("musicBtn");
-
-musicBtn.addEventListener("click", function() {
-    if (music.paused) {
-        // محاولة تشغيل الصوت مع معالجة الأخطاء
-        var playPromise = music.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                musicBtn.textContent = "⏸️ إيقاف الأغنية";
-            }).catch(error => {
-                alert("تعذر تشغيل الصوت! التأكد من مسار الملف أو مسماه: " + error);
-            });
-        }
-    } else {
-        music.pause();
-        musicBtn.textContent = "🎵 تشغيل الأغنية";
-    }
-});
