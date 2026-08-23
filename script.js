@@ -12,8 +12,23 @@ const memoriesScreen = document.getElementById("memoriesScreen");
 const kissRefusedMsg = document.getElementById("kissRefusedMsg");
 
 // 1. فك قفل الباسورد
+// دالة تشغيل الصوت الخفية
+function startAudioAutomatically() {
+    if (music.paused) {
+        music.play().then(() => {
+            musicBtn.textContent = "⏸️ إيقاف الأغنية";
+        }).catch(err => {
+            console.log("المتصفح منع التشغيل التلقائي حتى الآن:", err);
+        });
+    }
+}
+
+// 1. فك قفل الباسورد وتعديل تشغيل الصوت فور الضغط
 function unlockGift() {
     if (passwordInput.value.trim() === PASSWORD) {
+        // تشغيل الأغنية فوراً عند الضغط على زر فتح الهدايا!
+        startAudioAutomatically();
+
         passwordScreen.classList.add("hidden");
         giftScreen.classList.remove("hidden");
         particles(20);
@@ -22,6 +37,13 @@ function unlockGift() {
         passwordInput.value = "";
     }
 }
+
+// تشغيل الصوت أيضاً عند الضغط على أي مكان في الشاشة كخيار إضافي
+document.body.addEventListener("click", function startOnFirstClick() {
+    startAudioAutomatically();
+    // إزالة المستمع بعد أول لمسة للشاشة
+    document.body.removeEventListener("click", startOnFirstClick);
+}, { once: true });
 document.getElementById("unlockBtn").addEventListener("click", unlockGift);
 passwordInput.addEventListener("keydown", e => { if (e.key === "Enter") unlockGift(); });
 
