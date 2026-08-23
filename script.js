@@ -4,20 +4,20 @@ const START_DATE = new Date("2026-03-28T00:00:00");
 const music = document.getElementById("music");
 const musicBtn = document.getElementById("musicBtn");
 
-// دالة تشغيل الصوت التلقائية
+// دالة التشغيل الذكية
 function playAudio() {
-    if (music.paused) {
+    if (music && music.paused) {
         music.play().then(() => {
             if (musicBtn) musicBtn.textContent = "⏸️ إيقاف الأغنية";
         }).catch(err => {
-            console.log("في انتظار التفاعل لتشغيل الصوت:", err);
+            console.log("المتصفح يتطلب لمسة يد لتشغيل الأغنية:", err);
         });
     }
 }
 
-// 💥 حيلة التشغيل التلقائي: تشغيل الأغنية فور لمس الشاشة لأول مرة
-document.addEventListener("touchstart", playAudio, { once: true });
+// تشغيل الأغنية تلقائياً عند أول لمسة للشاشة على الإطلاق
 document.addEventListener("click", playAudio, { once: true });
+document.addEventListener("touchstart", playAudio, { once: true });
 
 // العناصر البرمجية
 const passwordScreen = document.getElementById("passwordScreen");
@@ -29,9 +29,9 @@ const questionScreen = document.getElementById("questionScreen");
 const memoriesScreen = document.getElementById("memoriesScreen");
 const kissRefusedMsg = document.getElementById("kissRefusedMsg");
 
-// 1. فك قفل الباسورد
+// 1. فتح الباسورد
 function unlockGift() {
-    playAudio(); // تشغيل الصوت فوراً عند فتح الهدية
+    playAudio();
     if (passwordInput.value.trim() === PASSWORD) {
         passwordScreen.classList.add("hidden");
         giftScreen.classList.remove("hidden");
@@ -44,7 +44,7 @@ function unlockGift() {
 document.getElementById("unlockBtn").addEventListener("click", unlockGift);
 passwordInput.addEventListener("keydown", e => { if (e.key === "Enter") unlockGift(); });
 
-// 2. القلوب والـ Particles
+// 2. القلوب والتأثيرات
 function particles(n) {
     const wrap = document.getElementById("particles");
     if (!wrap) return;
@@ -66,7 +66,7 @@ function particles(n) {
     }
 }
 
-// 3. الضغط على الهدية
+// 3. فتح الهدية
 document.getElementById("giftBox").addEventListener("click", () => {
     playAudio();
     particles(35);
@@ -76,13 +76,13 @@ document.getElementById("giftBox").addEventListener("click", () => {
     }, 500);
 });
 
-// 4. الانتقال لسؤال "عايز بوسة"
+// 4. انتقال لسؤال "عايز بوسة"
 document.getElementById("showMemories").addEventListener("click", () => {
     surpriseScreen.classList.add("hidden");
     questionScreen.classList.remove("hidden");
 });
 
-// 5. إجابات "عايز بوسة؟"
+// 5. التحكم في السؤال
 document.getElementById("yesKissBtn").addEventListener("click", () => {
     particles(40);
     questionScreen.classList.add("hidden");
@@ -111,14 +111,16 @@ function updateCounter() {
     document.getElementById("seconds").textContent = String(secs).padStart(2, "0");
 }
 
-// 7. زر التحكم بالصوت من خارج الشاشة
-musicBtn.addEventListener("click", function(e) {
-    e.stopPropagation(); // منع التداخل
-    if (music.paused) {
-        music.play();
-        musicBtn.textContent = "⏸️ إيقاف الأغنية";
-    } else {
-        music.pause();
-        musicBtn.textContent = "🎵 تشغيل الأغنية";
-    }
-});
+// 7. التحكم في زر التشغيل/الإيقاف المباشر
+if (musicBtn) {
+    musicBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (music.paused) {
+            music.play();
+            musicBtn.textContent = "⏸️ إيقاف الأغنية";
+        } else {
+            music.pause();
+            musicBtn.textContent = "🎵 تشغيل الأغنية";
+        }
+    });
+}
