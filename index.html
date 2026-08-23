@@ -10,11 +10,33 @@
 <body>
     <div id="particles"></div>
 
+    <!-- زر التحكم بالصوت ثابت ومكانه واضح وثابت دون حجب أي نص -->
+    <button id="musicBtn" style="
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        z-index: 99999;
+        background-color: #e91e63;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        cursor: pointer;
+    ">🎵 تشغيل الأغنية</button>
+
+    <!-- مشغل الصوت -->
+    <audio id="music" loop preload="auto">
+        <source src="assets/music.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- 1. شاشة الباسورد -->
     <section id="passwordScreen" class="screen">
         <div class="card">
             <div class="icon">🔒</div>
-            <h2>اكتبي الباسورد هداية خاصة لنونتي انا بس ❤️</h2>
+            <h2>اكتبي الباسورد هدية خاصة لنونتي ❤️</h2>
             <input id="passwordInput" type="password" placeholder="••••">
             <button id="unlockBtn">فتح المفاجأة ✨</button>
             <p id="passwordError" style="color: red; margin-top: 10px;"></p>
@@ -29,41 +51,33 @@
         <button id="giftBox" class="gift-btn">🎁</button>
     </section>
 
-    <!-- 3. شاشة رسالة المعايدة والمفاجأة -->
+    <!-- 3. شاشة المفاجأة والرسالة -->
     <section id="surpriseScreen" class="screen hidden">
         <div class="heart">💖</div>
         <h2>كل سنة وأنتِ طيبة يا نونتي 🎂</h2>
         <p class="message">
-          كل سنة وأنتِ طيبة يا أجمل حاجة حصلت في عمري، وأحلى وأحن هدية ربنا رزقني بيها 💕
-
-في يوم ميلادك، أنا مش بس بفتكر يوم اتولدتي فيه، أنا بفتكر اليوم اللي الدنيا ضحكتلي فيه وأهدتني وجودك. بصراحة كده، قبل ما تدخلي حياتي كانت الأيام عادية وبتعدي وخلاص، بس من يوم ما بقيتي فيها وكل حاجة بقى ليها طعم وتاني خالص. بقيتي أنتِ الأمان اللي ببهرب ليه من أي تعب، والضحكة اللي بتمسح أي هم، والدفء اللي مخلّي الدنيا دي كلها ألطف بكثير. كل يوم بيمر وأنتِ معايا وبجنبي، بتأكد إنك مش بس خطيبتي وحبيبتي، أنتِ بيتي ومطرحي والحاجة الوحيدة اللي عمري ما أمل منها.
-
-في اليوم ده، من كل قلبي وبكل حب الدنيا، بتمنى من ربنا يحفظك ليا وما يحرمنيش من وجودك أبداً. بتمنى ربنا يملأ قلبك فرح وسكينة، ويديكي على قد نيتك الجميلة ورقتك ضعف الفرحة اللي بتدخليه على قلبي.
-
-يارب يتمملنا على خير، ويجمعنا قريب أوي في بيتنا، تحت سقف واحد مقفول علينا على مودة ورحمة وراحة بال. ربنا يجعلنا سند لبعض، ويكتبلنا العمر الطويل سوا ونكبر ونعجز ونبني أحلى عيلة وأحلى أسرة كنا بنحلم بيها دايماً يارب.
-  يا أجمل حنين في الدنيا، ويا أحلى نونا ❤️<br>
+            يا أجمل حنين في الدنيا، ويا أحلى نونا ❤️<br>
             كل سنة وأنتِ في قلبي وكل سنة وأنتِ معايا ونفسي وكل حاجة حلوة في حياتي.. بحبك أوي 💕
         </p>
         <button id="showMemories">التالي ✨</button>
     </section>
 
-    <!-- 4. سلايد السؤال التفاعلي الجديد (عايز بوسة) -->
+    <!-- 4. سلايد السؤال التفاعلي (عايز بوسة) -->
     <section id="questionScreen" class="screen hidden">
         <div class="card">
             <div class="icon">💋</div>
             <h2>عايز بوسة؟ 😘</h2>
             <div class="btn-group" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
-                <button id="yesKissBtn" style="background-color: #4CAF50;">حاضر ياسمسومتي 😘</button>
-                <button id="noKissBtn" style="background-color: #f44336;">لا يا اوسا🙈</button>
+                <button id="yesKissBtn" style="background-color: #4CAF50; color: white;">أوكيه 😘</button>
+                <button id="noKissBtn" style="background-color: #f44336; color: white;">لا 🙈</button>
             </div>
-            <!-- رسالة الإصرار التي تظهر عند تكرار الرفض -->
             <p id="kissRefusedMsg" class="hidden" style="color: #e91e63; font-weight: bold; margin-top: 15px; font-size: 1.1rem;">
-                بروح امك الرفض مش اختيار مش هاتشوفي بقيت الهديه 🥺❤️
+                أنا عايز بوسة ضروري 🥺❤️
             </p>
         </div>
     </section>
 
-    <!-- 5. سلايد الذكريات والعداد الأخير -->
+    <!-- 5. سلايد الذكريات والعداد -->
     <section id="memoriesScreen" class="screen hidden">
         <h2>📸 ذكرياتنا الحلوة 📸</h2>
         <div class="photos">
@@ -71,11 +85,9 @@
             <img src="assets/photo2.jpg" alt="Memory 2">
             <img src="assets/photo3.jpg" alt="Memory 3">
             <img src="assets/photo4.jpg" alt="Memory 4">
-            <img src="assets/photo5.jpg" alt="Memory 5">
-            <img src="assets/photo6.jpg" alt="Memory 6">
         </div>
 
-        <div class="timer-box">
+        <div class="timer-box" style="margin-bottom: 60px;">
             <h3>⏰ الوقت اللي فات معاك 🎉</h3>
             <div class="timer-grid" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;">
                 <div><span id="days">00</span><p>يوم</p></div>
@@ -85,25 +97,6 @@
             </div>
         </div>
     </section>
-
-    <!-- مشغل الموسيقى -->
-    <!-- مشغل الموسيقى -->
-<audio id="music" loop preload="auto">
-    <button id="musicBtn" class="music-btn" style="
-    position: fixed;
-    bottom: 12px;
-    left: 12px;
-    z-index: 9999;
-    background: rgba(233, 30, 99, 0.85);
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    backdrop-filter: blur(4px);
-    cursor: pointer;
-">🎵 تشغيل الأغنية</button>
 
     <script src="script.js"></script>
 </body>
