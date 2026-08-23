@@ -52,13 +52,18 @@ function updateCounter(){
 const music = document.getElementById("music");
 const musicBtn = document.getElementById("musicBtn");
 
-musicBtn.addEventListener("click", () => {
+musicBtn.addEventListener("click", function() {
     if (music.paused) {
-        music.play().then(() => {
-            musicBtn.textContent = "⏸️ إيقاف الأغنية";
-        }).catch(error => {
-            console.log("خطأ في تشغيل الصوت:", error);
-        });
+        // محاولة تشغيل الصوت مع معالجة الأخطاء
+        var playPromise = music.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                musicBtn.textContent = "⏸️ إيقاف الأغنية";
+            }).catch(error => {
+                alert("تعذر تشغيل الصوت! التأكد من مسار الملف أو مسماه: " + error);
+            });
+        }
     } else {
         music.pause();
         musicBtn.textContent = "🎵 تشغيل الأغنية";
