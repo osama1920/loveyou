@@ -53,11 +53,14 @@ const music = document.getElementById("music");
 const musicBtn = document.getElementById("musicBtn");
 
 musicBtn.addEventListener("click", () => {
-  if (music.paused) {
-    music.play();
-    musicBtn.textContent = "⏸️ إيقاف الأغنية";
-  } else {
-    music.pause();
-    musicBtn.textContent = "🎵 تشغيل الأغنية";
-  }
+    if (music.paused) {
+        music.play().then(() => {
+            musicBtn.textContent = "⏸️ إيقاف الأغنية";
+        }).catch(error => {
+            console.log("خطأ في تشغيل الصوت:", error);
+        });
+    } else {
+        music.pause();
+        musicBtn.textContent = "🎵 تشغيل الأغنية";
+    }
 });
